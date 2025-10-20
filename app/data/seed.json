@@ -1,0 +1,30 @@
+{
+  "shipments": [
+    {
+      "tracking_id": "1Z12345",
+      "status": "In Transit",
+      "last_scan": "2025-10-18T15:42:00Z",
+      "origin": "Seoul",
+      "destination": "Prague",
+      "eta_days": 4
+    },
+    {
+      "tracking_id": "ABC999",
+      "status": "Out for Delivery",
+      "last_scan": "2025-10-20T02:10:00Z",
+      "origin": "Cyberjaya",
+      "destination": "Seoul",
+      "eta_days": 0
+    }
+  ],
+  "rates": [
+    { "service": "Express", "origin": "Seoul", "destination": "Prague", "price_usd": 52.0, "transit_days": 3 },
+    { "service": "Economy", "origin": "Seoul", "destination": "Prague", "price_usd": 34.5, "transit_days": 6 },
+    { "service": "Express", "origin": "Cyberjaya", "destination": "Seoul", "price_usd": 40.0, "transit_days": 2 }
+  ],
+  "locations": [
+    { "city": "Seoul", "name": "Dongdaemun ServicePoint", "address": "123 Market St" },
+    { "city": "Cyberjaya", "name": "Cyberjaya Hub", "address": "Lot 7 TechPark" },
+    { "city": "Prague", "name": "Old Town Pickup", "address": "5 Charles Sq" }
+  ]
+}
