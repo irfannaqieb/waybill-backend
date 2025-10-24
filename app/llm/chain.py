@@ -36,7 +36,7 @@ async def run_chain(user_message: str, http_client: AsyncClient, llm) -> dict:
 
     answer = await llm.complete(prompt)
 
-    final = redact(answer)
+    final = redact_pii(answer)
     return {
         "answer": final,
         "tools_used": tools_used,
