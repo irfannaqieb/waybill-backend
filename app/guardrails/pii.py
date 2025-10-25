@@ -6,7 +6,7 @@ PHONE = re.compile(r"\+?\d[\d\s\-]{7,}\d")
 
 nlp = spacy.load("en_core_web_sm")
 
-PII_ENTITIES = {"PERSON", "ORG", "GPE", "LOC", "DATE"}
+PII_ENTITIES = {"PERSON"}
 
 
 def redact_pii(text: str):
