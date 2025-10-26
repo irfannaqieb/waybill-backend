@@ -1,7 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pathlib import Path
 import json
-import random
 
 mock_router = APIRouter(prefix="/mock")
 mock_file = Path(__file__).with_name("mock_shipments.json")
