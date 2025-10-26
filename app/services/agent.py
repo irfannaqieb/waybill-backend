@@ -1,6 +1,6 @@
 from __future__ import annotations
 import re
-from typing import Any, Dict, Literal, Optional
+from typing import Any, Dict, Literal
 
 from app.services.tools import track_shipment, get_rates, find_locations
 
@@ -70,7 +70,7 @@ def run_agent(message: str) -> str:
         return {
             "intent": intent,
             "tool": "track_shipment",
-            "*args": {tracking_id: tid},
+            "*args": {"tracking_id": tid},
             "result": res,
             "answer": answer,
             "ok": True,
@@ -122,7 +122,7 @@ def run_agent(message: str) -> str:
                 "answer": f"No pickup locations found in {city}.",
                 "ok": False,
             }
-        names = ", ".join(l["name"] for l in locs)
+        names = ", ".join(loc["name"] for loc in locs)
         answer = f"Pickup points in {city}: {names}."
         return {
             "intent": intent,

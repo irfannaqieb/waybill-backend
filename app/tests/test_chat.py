@@ -1,5 +1,4 @@
 import pytest
-from httpx import AsyncClient
 from types import SimpleNamespace
 from app.llm.chain import run_chain
 
