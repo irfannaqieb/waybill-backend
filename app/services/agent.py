@@ -51,7 +51,7 @@ def run_agent(message: str) -> str:
     args = parse_args(intent, message)
 
     if intent == "track":
-        tid = args.get["tracking_id"]
+        tid = args.get("tracking_id")
         if not tid:
             return {
                 "intent": intent,
