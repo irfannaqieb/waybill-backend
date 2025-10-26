@@ -1,0 +1,54 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+
+# Git and logs
+.git
+.gitignore
+*.log
+
+# OS/editor files
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+*.code-workspace
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Build artifacts
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Git and logs
+.git
+.gitignore
+*.log
+
+# Docker files
+Dockerfile*
+.dockerignore
+docker-compose*.yml
+
+# OS/editor files
+.DS_Store
+*.swp
+
+# Local data/configs
+.env
+.env.local
+*.local
