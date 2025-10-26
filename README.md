@@ -100,7 +100,7 @@ curl http://localhost:8000/health
 Track a package using its tracking ID:
 
 ```bash
-curl -X POST http://localhost:8000/chat/chat -H "Content-Type: application/json" -d "{\"message\": \"track 1Z12345\"}"
+curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\": \"track 1Z12345\"}"
 ```
 
 **Response:**
@@ -126,7 +126,7 @@ curl -X POST http://localhost:8000/chat/chat -H "Content-Type: application/json"
 
 **Alternative tracking ID:**
 ```bash
-curl -X POST http://localhost:8000/chat/chat -H "Content-Type: application/json" -d "{\"message\": \"track ABC999\"}"
+curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\": \"track ABC999\"}"
 ```
 
 ---
@@ -136,7 +136,7 @@ curl -X POST http://localhost:8000/chat/chat -H "Content-Type: application/json"
 Get rate quotes between cities:
 
 ```bash
-curl -X POST http://localhost:8000/chat/chat -H "Content-Type: application/json" -d "{\"message\": \"rates from Seoul to Prague 2kg\"}"
+curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\": \"rates from Seoul to Prague 2kg\"}"
 ```
 
 **Response:**
@@ -176,7 +176,7 @@ curl -X POST http://localhost:8000/chat/chat -H "Content-Type: application/json"
 
 **Different route:**
 ```bash
-curl -X POST http://localhost:8000/chat/chat -H "Content-Type: application/json" -d "{\"message\": \"rates from Cyberjaya to Seoul 1kg\"}"
+curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\": \"rates from Cyberjaya to Seoul 1kg\"}"
 ```
 
 ---
@@ -186,7 +186,7 @@ curl -X POST http://localhost:8000/chat/chat -H "Content-Type: application/json"
 Find pickup points in a specific city:
 
 ```bash
-curl -X POST http://localhost:8000/chat/chat -H "Content-Type: application/json" -d "{\"message\": \"nearest pickup location in Seoul\"}"
+curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\": \"nearest pickup location in Seoul\"}"
 ```
 
 **Response:**
@@ -211,7 +211,7 @@ curl -X POST http://localhost:8000/chat/chat -H "Content-Type: application/json"
 
 **Other cities:**
 ```bash
-curl -X POST http://localhost:8000/chat/chat -H "Content-Type: application/json" -d "{\"message\": \"pickup locations in Prague\"}"
+curl -X POST http://localhost:8000/chat -H "Content-Type: application/json" -d "{\"message\": \"pickup locations in Prague\"}"
 ```
 
 ---
@@ -327,20 +327,3 @@ Create a `.env` file for configuration (optional):
 OPENAI_API_KEY=your_key_here
 LOG_LEVEL=INFO
 ```
-
-## Future Enhancements
-
-- [ ] User authentication and API keys
-- [ ] Real-time shipment notifications
-- [ ] Multi-language support
-- [ ] Advanced route optimization
-- [ ] Integration with actual shipping carriers
-
-## License
-
-MIT License
-
-## Contact
-
-For questions or demo inquiries, please reach out via the repository or email.
-
