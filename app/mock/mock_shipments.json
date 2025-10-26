@@ -1,0 +1,32 @@
+[
+  {
+    "tracking_id": "DHL12345MY",
+    "status": "In Transit",
+    "last_scan": "KUL Hub",
+    "eta": "2025-10-26",
+    "history": [
+      {"loc": "Pickup", "ts": "2025-10-23"},
+      {"loc": "KUL Hub", "ts": "2025-10-24"}
+    ]
+  },
+  {
+    "tracking_id": "DHL99999SG",
+    "status": "Delivered",
+    "last_scan": "Singapore Facility",
+    "eta": "2025-10-25",
+    "history": [
+      {"loc": "Pickup", "ts": "2025-10-22"},
+      {"loc": "Singapore Facility", "ts": "2025-10-25"}
+    ]
+  },
+  {
+    "tracking_id": "DHL77777HK",
+    "status": "Pending Customs",
+    "last_scan": "Hong Kong",
+    "eta": "2025-10-29",
+    "history": [
+      {"loc": "Pickup", "ts": "2025-10-23"},
+      {"loc": "Hong Kong Customs", "ts": "2025-10-24"}
+    ]
+  }
+]
