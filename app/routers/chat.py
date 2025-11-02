@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 from fastapi import APIRouter
-from app.services.agent import run_agent
+from httpx import AsyncClient
+from app.llm.client import LLMClient
+from app.llm.chain import run_chain
 
 router = APIRouter()
 
@@ -11,5 +13,7 @@ class ChatRequest(BaseModel):
 
 @router.post("/chat")
 async def chat(request: ChatRequest):
-    response = run_agent(request.message)
-    return response
+    async with AsyncClient(timeout=10) as http_client:
+        llm = LLMClient()
+        result = await run_chain(request.message, http_client, llm)
+    return result

@@ -21,10 +21,47 @@ def classify_intent(message: str) -> Intent:
 def parse_args(intent: Intent, message: str) -> Dict[str, Any]:
     if intent == "track":
         tid = None
-        m = re.search(r"\b([A-Za-z0-9]{5,})\b", message)
-        if m:
-            tid = m.group(1)
-            return {"tracking_id": tid}
+        # Common words to exclude
+        exclude_words = {
+            "track",
+            "tracking",
+            "status",
+            "package",
+            "parcel",
+            "shipment",
+            "please",
+            "check",
+            "find",
+            "show",
+            "what",
+            "where",
+            "when",
+        }
+
+        # First try to find patterns that look like tracking IDs:
+        # - Mix of letters and numbers (e.g., "1Z12345", "ABC999")
+        # - At least one digit and one letter
+        patterns = [
+            r"\b([A-Z]{2,}\d{2,}[A-Z0-9]*)\b",  # ABC123, ABC999
+            r"\b(\d{1,}[A-Z]{2,}\d{2,})\b",  # 1Z12345
+            r"\b([A-Z]\d{4,}[A-Z0-9]*)\b",  # A12345
+        ]
+
+        for pattern in patterns:
+            m = re.search(pattern, message, re.I)
+            if m:
+                tid = m.group(1).upper()
+                if tid.lower() not in exclude_words:
+                    return {"tracking_id": tid}
+
+        # Fallback: find any alphanumeric string 5+ chars, but exclude common words
+        all_matches = re.findall(r"\b([A-Za-z0-9]{5,})\b", message)
+        for match in all_matches:
+            if match.lower() not in exclude_words:
+                tid = match.upper()
+                return {"tracking_id": tid}
+
+        return {}
     if intent == "rates":
         o = re.search(r"from\s+([A-Za-z\s]+)\s+to\s+([A-Za-z\s]+)", message, re.I)
         w = re.search(r"(\d+(?:\.\d+)?)\s?kg", message, re.I)
