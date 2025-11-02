@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waybill Shipping Assistant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .chat-container {
+            width: 90%;
+            max-width: 800px;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+        }
+        .chat-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .chat-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .message.user {
+            align-items: flex-end;
+        }
+        .message.bot {
+            align-items: flex-start;
+        }
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+        }
+        .message.user .message-bubble {
+            background: #667eea;
+            color: white;
+        }
+        .message.bot .message-bubble {
+            background: white;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .message-bubble details {
+            margin-top: 10px;
+        }
+        .message-bubble summary {
+            cursor: pointer;
+            color: #667eea;
+            font-size: 12px;
+        }
+        .message-bubble pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+        .quick-actions {
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .quick-btn {
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .quick-btn:hover {
+            background: #e0e0e0;
+        }
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+        }
+        .chat-input:focus {
+            border-color: #667eea;
+        }
+        .send-btn {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .send-btn:hover {
+            background: #5568d3;
+        }
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>🚚 Waybill Shipping Assistant</h1>
+            <p>Track packages, get rates, and find pickup locations</p>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                <div class="message-bubble">
+                    👋 Hi! I can help you with:
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Tracking shipments</li>
+                        <li>Getting shipping rates</li>
+                        <li>Finding pickup locations</li>
+                    </ul>
+                    Try the quick actions below or type your question!
+                </div>
+            </div>
+        </div>
+        <div class="quick-actions">
+            <button class="quick-btn" onclick="sendQuickMessage('track 1Z12345')">Track Package</button>
+            <button class="quick-btn" onclick="sendQuickMessage('rates from Seoul to Prague 2kg')">Get Rates</button>
+            <button class="quick-btn" onclick="sendQuickMessage('nearest pickup location in Seoul')">Find Pickup</button>
+            <button class="quick-btn" onclick="sendQuickMessage('rates from Cyberjaya to Seoul 1kg')">Cyberjaya → Seoul</button>
+        </div>
+        <div class="chat-input-container">
+            <input 
+                type="text" 
+                class="chat-input" 
+                id="messageInput" 
+                placeholder="Type your message here..."
+                onkeypress="handleKeyPress(event)"
+            >
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        function addMessage(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            
+            if (isUser) {
+                bubble.textContent = text;
+            } else {
+                try {
+                    const response = JSON.parse(text);
+                    if (response.answer) {
+                        bubble.innerHTML = response.answer.replace(/\n/g, '<br>');
+                        
+                        let metadata = [];
+                        if (response.snippets && response.snippets.length > 0) {
+                            metadata.push(`Sources: ${response.snippets.join(', ')}`);
+                        }
+                        if (response.tools_used && response.tools_used.length > 0) {
+                            metadata.push(`Tools: ${response.tools_used.join(', ')}`);
+                        }
+                        if (response.intent && response.intent !== 'unknown') {
+                            metadata.push(`Intent: ${response.intent}`);
+                        }
+                        
+                        if (metadata.length > 0) {
+                            bubble.innerHTML += '<br><br><small style="color: #666; font-size: 11px;">' + 
+                                metadata.join(' • ') + '</small>';
+                        }
+                        
+                        if (response.result && (Array.isArray(response.result) || typeof response.result === 'object')) {
+                            bubble.innerHTML += '<br><br><details><summary style="cursor: pointer; color: #667eea; font-size: 12px;">View Raw Data</summary><pre style="font-size: 11px;">' + 
+                                JSON.stringify(response.result, null, 2) + '</pre></details>';
+                        }
+                    } else {
+                        bubble.textContent = text;
+                    }
+                } catch (e) {
+                    bubble.textContent = text;
+                }
+            }
+            
+            messageDiv.appendChild(bubble);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showLoading() {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.id = 'loadingMessage';
+            
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            bubble.innerHTML = '<div class="loading"></div>';
+            
+            messageDiv.appendChild(bubble);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeLoading() {
+            const loading = document.getElementById('loadingMessage');
+            if (loading) loading.remove();
+        }
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            messageInput.value = '';
+            sendBtn.disabled = true;
+            showLoading();
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                const data = await response.json();
+                removeLoading();
+                
+                if (data.answer || (data.ok !== false)) {
+                    addMessage(JSON.stringify(data), false);
+                } else {
+                    addMessage(`Error: ${data.answer || 'Something went wrong'}`, false);
+                }
+            } catch (error) {
+                removeLoading();
+                addMessage(`Error: ${error.message}`, false);
+            } finally {
+                sendBtn.disabled = false;
+                messageInput.focus();
+            }
+        }
+
+        function sendQuickMessage(message) {
+            messageInput.value = message;
+            sendMessage();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        messageInput.focus();
+    </script>
+</body>
+</html>
+
